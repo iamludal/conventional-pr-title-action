@@ -10,7 +10,9 @@ module.exports = {
     ["@semantic-release/npm", {
       npmPublish: false,
     }],
-    "@semantic-release/git",
+    ["@semantic-release/git", {
+      assets: ["package.json", "package-lock.json", "dist"],
+    }],
     "@semantic-release/github",
   ],
 };
