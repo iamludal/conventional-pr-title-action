@@ -1,16 +1,20 @@
-const path = require('path');
 const core = require('@actions/core');
-const util = require('util');
-const exec = util.promisify(require('child_process').exec);
+const npm = require('npm');
 
 /**
  * Install preset
  * @returns {Promise<void>}
  */
-module.exports = async (preset) => {
-  const {stdout, stderr} = await exec(`npm install --quiet ${preset}`, {
-    cwd: path.resolve(__dirname)
-  });
-  core.debug(stderr);
-  return Promise.resolve();
-};
+module.exports = (preset) => (
+  new Promise((resolve, reject) => {
+    core.debug(`Installing preset ${preset}`);
+    npm.commands.install([preset], (err) => {
+      if (err) {
+        core.error(err);
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  })
+);
